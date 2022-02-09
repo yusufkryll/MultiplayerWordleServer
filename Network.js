@@ -19,6 +19,9 @@ module.exports = class Network
         this.io.on('connect', (client) => {
             this.onConnect(client);
         });
+        this.io.on('RunAll', (data) => {
+            this.io.emit('RunAll', data);
+        });
     }
     Listen = () =>
     {
