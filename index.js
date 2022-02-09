@@ -5,5 +5,5 @@ var network = new Network(port, {});
 
 
 network.onConnect = client => {
-    console.log("A player connected.");  
+    console.log("A player connected: " + client.id);  
 };

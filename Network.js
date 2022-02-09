@@ -16,12 +16,14 @@ module.exports = class Network
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
+        this.io.on('connect', (client) => {
+            this.onConnect(client);
+        });
     }
     Listen = () =>
     {
         this.server.listen(this.port, () => {
             console.log('listening on *:' + this.port);
-            this.onConnect();
         });
     }
 }
