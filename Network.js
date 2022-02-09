@@ -18,10 +18,10 @@ module.exports = class Network
         this.Listen();
         this.io.on('connect', (client) => {
             this.onConnect(client);
-        });
-        this.io.on('RunAll', (data) => {
-            console.log("Hi!");
-            this.io.emit('RunAll', data);
+            client.on('RunAll', (data) => {
+                console.log(data);
+                this.io.emit('RunAll', data);
+            });
         });
     }
     Listen = () =>
