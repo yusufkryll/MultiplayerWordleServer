@@ -20,6 +20,7 @@ module.exports = class Network
             this.onConnect(client);
         });
         this.io.on('RunAll', (data) => {
+            console.log(data);
             this.io.emit('RunAll', data);
         });
     }
