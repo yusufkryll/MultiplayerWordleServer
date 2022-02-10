@@ -29,6 +29,7 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
+            client.log = (message) => client.emit("debug-log", message); 
             pool.connect((err, db) => {
               this.onConnect(client, db);
             });

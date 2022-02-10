@@ -11,6 +11,7 @@ network.onConnect = async (client, db) => {
     client.emit("dbtest", results);
     client.on("search-game", data => {
         client.join("pool");
+        client.log(client.rooms);
         console.log(client.rooms)
     })
 };
