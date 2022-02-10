@@ -22,27 +22,20 @@ module.exports = class Network
           });
           
         app.get('/', function(req, res) {
-            res.send("<h1>Hello world!</h1>");
+            res.send("<h1 style = 'color:red;'>No Page</h1>");
         })
-
-        app.get('/db', async (req, res) => {
-            try {
-              const client = await pool.connect();
-              const result = await client.query('SELECT * FROM test_table');
-              const results = { 'results': (result) ? result.rows : null};
-              res.send( results );
-              client.release();
-            } catch (err) {
-              console.error(err);
-              res.send("Error " + err);
-            }
-          });
         this.server = http.createServer(app);
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
-            this.onConnect(client);
+            try {
+              const db = await pool.connect();
+              this.onConnect(client, db);
+              db.release();
+            } catch (err) {
+              console.error(err);
+            }
             client.on('RunAll', (data) => {
                 console.log(data);
                 this.io.emit('RunAll', data);
