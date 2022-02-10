@@ -13,7 +13,6 @@ module.exports = class Network
         const socketIo = require('socket.io');
         const { Pool } = require('pg');
         const app = express();
-        this.router = express.Router();
 
         const pool = new Pool({
             connectionString: process.env.DATABASE_URL,
@@ -22,11 +21,11 @@ module.exports = class Network
             }
           });
           
-        this.router.get('/', function(req, res, next) {
-            res.render('index', { title: "Express"});
+        app.get('/', function(req, res) {
+            res.send("<h1>Hello world!</h1>");
         })
 
-        this.router.get('/db', async (req, res) => {
+        app.get('/db', async (req, res) => {
             try {
               const client = await pool.connect();
               const result = await client.query('SELECT * FROM test_table');
