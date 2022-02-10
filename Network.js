@@ -29,7 +29,7 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
-            //client.log = (message) => client.emit("debug-log", message); 
+            client.log = (message) => client.emit("debug-log", message); 
             pool.connect((err, db) => {
               this.onConnect(client, db);
             });
@@ -38,7 +38,9 @@ module.exports = class Network
                 this.io.emit('RunAll', data);
             });
             client.on("SearchGame", data => {
-                console.log("hey");
+                client.join("pool");
+                console.log(client.rooms);
+                client.log(client.rooms);
             })
         });
     }
