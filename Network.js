@@ -37,6 +37,11 @@ module.exports = class Network
                 console.log(data);
                 this.io.emit('RunAll', data);
             });
+            client.on("SearchGame", () => {
+                client.join("pool");
+                console.log("hey");
+                client.log(client.rooms);
+            })
         });
     }
     Listen = () =>
