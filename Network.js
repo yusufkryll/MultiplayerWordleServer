@@ -2,7 +2,7 @@ module.exports = class Network
 {
     constructor(port)
     {
-        this.onConnect = () => { console.log("Connection successfully!") };
+        this.onConnect = (client, db) => { console.log("Connection successfully!") };
         this.Start(port);
         
     }
@@ -29,6 +29,7 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', async (client) => {
+            client.emit("dbtest", "ww");
             try {
               const db = await pool.connect();
               this.onConnect(client, db);
