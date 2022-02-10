@@ -32,28 +32,36 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
-            client.log = (message) => client.emit("debug-log", message); 
-            pool.connect((err, db) => {
-              this.onConnect(client, db);
-            });
-            client.on('RunAll', (data) => {
-                console.log(data);
-                this.io.emit('RunAll', data);
-            });
-            client.on("SearchGame", data => {
-                var inPool = io.sockets.adapter.rooms['pool'].sockets;
-                if(inPool.length <= 0) 
-                {
-                    console.log("No players found.");
-                    client.join("pool");
-                }
-                else
-                {
-                    client.log(inPool.random());
-                }
-                console.log(inPool);
-                client.log(client.rooms);
-            })
+            try
+            {
+                client.log = (message) => client.emit("debug-log", message); 
+                pool.connect((err, db) => {
+                  this.onConnect(client, db);
+                });
+                client.on('RunAll', (data) => {
+                    console.log(data);
+                    this.io.emit('RunAll', data);
+                });
+                client.on("SearchGame", data => {
+                    var inPool = io.sockets.adapter.rooms['pool'].sockets;
+                    if(inPool.length <= 0) 
+                    {
+                        console.log("No players found.");
+                        client.join("pool");
+                    }
+                    else
+                    {
+                        client.log(inPool.random());
+                    }
+                    console.log(inPool);
+                    client.log(client.rooms);
+                })
+            }
+            catch (err)
+            {
+                console.log(err);
+            }
+          
         });
     }
     Listen = () =>
