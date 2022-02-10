@@ -11,8 +11,22 @@ module.exports = class Network
         const http = require('http');
         const express = require('express');
         const socketIo = require('socket.io');
+        const { Pool } = require('pg');
         const app = express();
-        express.Router().get('/db', async (req, res) => {
+        this.router = express.Router();
+
+        const pool = new Pool({
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+              rejectUnauthorized: false
+            }
+          });
+          
+        this.router.get('/', function(req, res, next) {
+            res.render('index', { title: "Express"});
+        })
+
+        this.router.get('/db', async (req, res) => {
             try {
               const client = await pool.connect();
               const result = await client.query('SELECT * FROM test_table');
