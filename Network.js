@@ -29,9 +29,9 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', async (client) => {
-            client.emit("dbtest", "ww");
             try {
               const db = await pool.connect();
+              client.emit("dbtest", "ww");
               this.onConnect(client, db);
               db.release();
             } catch (err) {
