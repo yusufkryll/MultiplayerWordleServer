@@ -28,7 +28,7 @@ module.exports = class Network
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
-        this.io.on('connect', (client) => {
+        this.io.on('connect', async (client) => {
             try {
               const db = await pool.connect();
               this.onConnect(client, db);
