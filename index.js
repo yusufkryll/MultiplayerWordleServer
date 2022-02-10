@@ -9,4 +9,8 @@ network.onConnect = async (client, db) => {
     const results = { 'results': (result) ? result.rows : null};
     console.log(results);
     client.emit("dbtest", results);
+    client.on("search-game", data => {
+        client.join("pool");
+        console.log(client.rooms)
+    })
 };
