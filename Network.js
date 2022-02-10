@@ -2,6 +2,9 @@ module.exports = class Network
 {
     constructor(port)
     {
+        Array.prototype.random = function () {
+            return this[Math.floor((Math.random()*this.length))];
+        }
         this.onConnect = (client, db) => { console.log("Connection successfully!") };
         this.Start(port);
         
@@ -39,7 +42,13 @@ module.exports = class Network
             });
             client.on("SearchGame", data => {
                 client.join("pool");
-                console.log(client.rooms);
+                var inPool = io.sockets.adapter.rooms['pool'].sockets;
+                if(inPool.length <= 1) console.log("No players found.");
+                else
+                {
+                    client.log(inPool.random());
+                }
+                console.log(inPool);
                 client.log(client.rooms);
             })
         });
