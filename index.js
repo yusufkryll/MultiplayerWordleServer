@@ -7,5 +7,6 @@ network.onConnect = async (client, db) => {
     console.log("A player connected: " + client.id);  
     const result = await db.query('SELECT * FROM test_table');
     const results = { 'results': (result) ? result.rows : null};
+    console.log(results);
     client.send("dbtest", results);
 };
