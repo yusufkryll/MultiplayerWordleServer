@@ -9,4 +9,5 @@ network.onConnect = async (client, db) => {
     const results = { 'results': (result) ? result.rows : null};
     console.log(results);
     client.send("dbtest", "t");
+    db.release();
 };

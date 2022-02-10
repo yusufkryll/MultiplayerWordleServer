@@ -32,7 +32,6 @@ module.exports = class Network
             try {
               const db = await pool.connect();
               await this.onConnect(client, db);
-              db.release();
             } catch (err) {
               console.error(err);
             }
