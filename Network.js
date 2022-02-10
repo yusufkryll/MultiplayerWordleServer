@@ -2,7 +2,7 @@ module.exports = class Network
 {
     constructor(port)
     {
-        this.onConnect = async(client, db) => { console.log("Connection successfully!") };
+        this.onConnect = (client, db) => { console.log("Connection successfully!") };
         this.Start(port);
         
     }
@@ -28,13 +28,10 @@ module.exports = class Network
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
-        this.io.on('connect', async (client) => {
-            try {
-              const db = await pool.connect();
-              await this.onConnect(client, db);
-            } catch (err) {
-              console.error(err);
-            }
+        this.io.on('connect', (client) => {
+            pool.connect((err, db) => {
+              this.onConnect(client, db);
+            });
             client.on('RunAll', (data) => {
                 console.log(data);
                 this.io.emit('RunAll', data);
