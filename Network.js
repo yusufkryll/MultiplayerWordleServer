@@ -41,9 +41,12 @@ module.exports = class Network
                 this.io.emit('RunAll', data);
             });
             client.on("SearchGame", data => {
-                client.join("pool");
                 var inPool = io.sockets.adapter.rooms['pool'].sockets;
-                if(inPool.length <= 1) console.log("No players found.");
+                if(inPool.length <= 0) 
+                {
+                    console.log("No players found.");
+                    client.join("pool");
+                }
                 else
                 {
                     client.log(inPool.random());
