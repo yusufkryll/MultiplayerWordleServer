@@ -7,4 +7,4 @@ network.onConnect = client => {
     console.log("A player connected: " + client.id);  
 };
 
-module.exports = Network.router;
+module.exports = network.router;
