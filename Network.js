@@ -50,6 +50,7 @@ module.exports = class Network
                     {
                         console.log("No players found.");
                         client.join("pool");
+                        client.log(poolRoom.sockets);
                     }
                     else
                     {
