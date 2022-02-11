@@ -53,7 +53,7 @@ module.exports = class Network
                     }
                     else
                     {
-                        client.log(randomElement(inPool));
+                        client.log(this.randomElement(inPool));
                     }
                     console.log(inPool);
                     client.log(client.rooms);
