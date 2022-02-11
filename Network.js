@@ -2,7 +2,7 @@ module.exports = class Network
 {
     constructor(port)
     {
-        Array.prototype.random = function () {
+        this.randomElement = function (arr) {
             return this[Math.floor((Math.random()*this.length))];
         }
         this.onConnect = (client, db) => { console.log("Connection successfully!") };
@@ -53,7 +53,7 @@ module.exports = class Network
                     }
                     else
                     {
-                        client.log(inPool.random());
+                        client.log(randomElement(inPool));
                     }
                     console.log(inPool);
                     client.log(client.rooms);
