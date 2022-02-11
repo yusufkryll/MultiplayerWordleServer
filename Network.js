@@ -44,7 +44,7 @@ module.exports = class Network
                 });
                 client.on("SearchGame", data => {
                     var poolRoom = this.io.sockets.adapter.rooms['pool'];
-                    var inPool = [];
+                    var inPool = {};
                     if(poolRoom != undefined) inPool = poolRoom.sockets;
                     if(inPool.length <= 0) 
                     {
@@ -53,7 +53,7 @@ module.exports = class Network
                     }
                     else
                     {
-                        console.log(this.randomElement(inPool.filter((v, i) => {
+                        console.log(this.randomElement(Object.values(inPool).filter((v, i) => {
                             return v != client.id
                         }).remove()));
                     }
