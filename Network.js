@@ -53,9 +53,11 @@ module.exports = class Network
                     }
                     else
                     {
-                        console.log(this.randomElement(Object.values(inPool).filter((v, i) => {
+                        var otherPlayer = this.randomElement(Object.values(inPool).filter((v, i) => {
                             return v != client.id
-                        })));
+                        }));
+                        client.emit("GameFound", otherPlayer);
+                        console.log(otherPlayer);
                     }
                     console.log(inPool);
                     client.log(client.rooms);
