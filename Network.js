@@ -55,7 +55,7 @@ module.exports = class Network
                     {
                         console.log(this.randomElement(Object.values(inPool).filter((v, i) => {
                             return v != client.id
-                        }).remove()));
+                        })));
                     }
                     console.log(inPool);
                     client.log(client.rooms);
