@@ -29,19 +29,14 @@ module.exports = class Network
             res.send("<h1 style = 'color:red;'>No Page</h1>");
         })
         this.server = http.createServer(app);
-        this.io = socketIo(this.server, { 
-            transports: ['websocket'],
-            pingInterval: 1000 * 60 * 5,
-            pingTimeout: 1000 * 60 * 3
-        });
+        this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
-        var that = this;
         this.io.on('connect', (client) => {
             try
             {
                 let getInPool = () => {
-                    var poolRoom = that.io.sockets.adapter.rooms['pool'];
+                    var poolRoom = this.io.sockets.adapter.rooms['pool'];
                     if(poolRoom != undefined) return poolRoom.sockets;
                     else return {};
                 };
