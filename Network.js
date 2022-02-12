@@ -59,7 +59,7 @@ module.exports = class Network
                         var otherPlayer = this.randomElement(Object.values(inPool).filter((v, i) => {
                             return v != client.id
                         }));
-                        this.io.to(otherPlayer).join(roomName);
+                        //this.io.to(otherPlayer).join(roomName);
                         this.io.to(otherPlayer).emit("GameFound", client.id);
                         client.emit("GameFound", otherPlayer);
 
