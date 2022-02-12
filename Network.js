@@ -31,6 +31,11 @@ module.exports = class Network
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
+        let getInPool = () => {
+            var poolRoom = this.io.sockets.adapter.rooms['pool'];
+            if(poolRoom != undefined) return poolRoom.sockets;
+            else return {};
+        };
         this.io.on('connect', (client) => {
             try
             {
@@ -43,12 +48,6 @@ module.exports = class Network
                     this.io.emit('RunAll', data);
                 });
                 client.on("SearchGame", data => {
-                    let getInPool = () => {
-                        var poolRoom = this.io.sockets.adapter.rooms['pool'];
-                        if(poolRoom != undefined) return poolRoom.sockets;
-                        else return {};
-                    };
-
                     if(Object.keys(getInPool()).length <= 0)
                     {
                         console.log("No players found.");
