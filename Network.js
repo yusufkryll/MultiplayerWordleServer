@@ -57,7 +57,7 @@ module.exports = class Network
                     else
                     {
                         console.log("There is players in pool.");
-                        var otherPlayer = this.randomElement(getInPool());
+                        var otherPlayer = this.randomElement(Object.keys(getInPool()));
                         console.log(otherPlayer);
                         let roomName = client.id + "-room";
                         client.join(roomName);
