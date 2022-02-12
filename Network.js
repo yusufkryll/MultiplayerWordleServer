@@ -32,7 +32,6 @@ module.exports = class Network
         })
         this.server = http.createServer(app);
         this.io = socketIo(this.server, { 
-            transports: ['websocket'],
             pingInterval: 1000 * 60 * 5,
             pingTimeout: 1000 * 60 * 3
         });
