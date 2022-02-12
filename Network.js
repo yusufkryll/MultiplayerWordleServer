@@ -32,14 +32,15 @@ module.exports = class Network
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
-        let getInPool = () => {
-            var poolRoom = this.io.sockets.adapter.rooms['pool'];
-            if(poolRoom != undefined) return poolRoom.sockets;
-            else return {};
-        };
+        var that = this;
         this.io.on('connect', (client) => {
             try
             {
+                let getInPool = () => {
+                    var poolRoom = that.io.sockets.adapter.rooms['pool'];
+                    if(poolRoom != undefined) return poolRoom.sockets;
+                    else return {};
+                };
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
                   this.onConnect(client, db);
