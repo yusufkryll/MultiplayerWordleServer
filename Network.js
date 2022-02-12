@@ -46,7 +46,7 @@ module.exports = class Network
                     var poolRoom = this.io.sockets.adapter.rooms['pool'];
                     var inPool = {};
                     if(poolRoom != undefined) inPool = poolRoom.sockets;
-                    if(inPool.length <= 0) 
+                    if(Object.keys(inPool).length <= 0)
                     {
                         console.log("No players found.");
                         client.join("pool");
