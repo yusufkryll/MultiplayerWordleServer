@@ -43,10 +43,13 @@ module.exports = class Network
                     this.io.emit('RunAll', data);
                 });
                 client.on("SearchGame", data => {
-                    var poolRoom = this.io.sockets.adapter.rooms['pool'];
-                    var inPool = {};
-                    if(poolRoom != undefined) inPool = poolRoom.sockets;
-                    if(Object.keys(inPool).length <= 0)
+                    let getInPool = () => {
+                        var poolRoom = this.io.sockets.adapter.rooms['pool'];
+                        if(poolRoom != undefined) return poolRoom.sockets;
+                        else return {};
+                    };
+
+                    if(Object.keys(getInPool()).length <= 0)
                     {
                         console.log("No players found.");
                         client.join("pool");
@@ -54,7 +57,7 @@ module.exports = class Network
                     else
                     {
                         console.log("There is players in pool.");
-                        var otherPlayer = this.randomElement(inPool);
+                        var otherPlayer = this.randomElement(getInPool());
                         console.log(otherPlayer);
                         let roomName = client.id + "-room";
                         client.join(roomName);
@@ -63,7 +66,7 @@ module.exports = class Network
                         this.io.to(otherPlayer).emit("GameFound", client.id);
                         client.emit("GameFound", otherPlayer);
                     }
-                    console.log(inPool);
+                    console.log(getInPool());
                 })
             }
             catch (err)
