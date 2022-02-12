@@ -29,12 +29,7 @@ module.exports = class Network
             res.send("<h1 style = 'color:red;'>No Page</h1>");
         })
         this.server = http.createServer(app);
-        this.io = socketIo(this.server, {
-            serveClient: true, 
-            pingInterval: 20000,
-            pingTimeout: 5000,
-            cookie: false
-        });
+        this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
         var that = this;
