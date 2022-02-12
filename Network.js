@@ -67,10 +67,14 @@ module.exports = class Network
             {
                 console.log(err);
             }
-          client.on("disconnect", () => {
-              client.leave("pool");
-              console.log("disconnected.")
-          });
+            client.on("disconnect", () => {
+                client.leave("pool");
+                console.log("disconnected.")
+            });
+            client.on("client-disconnect", () => {
+                client.leave("pool");
+                console.log("disconnected.")
+            });
         });
     }
     Listen = () =>
