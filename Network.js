@@ -31,10 +31,7 @@ module.exports = class Network
             res.send("<h1 style = 'color:red;'>No Page</h1>");
         })
         this.server = http.createServer(app);
-        this.io = socketIo(this.server, { 
-            pingInterval: 1000 * 60 * 5,
-            pingTimeout: 1000 * 60 * 3
-        });
+        this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
@@ -43,6 +40,15 @@ module.exports = class Network
                     if(poolRoom != undefined) return poolRoom.sockets;
                     else return {};
                 };
+                client.on('pong', function(data){
+                    console.log("Pong received from client");
+                });
+                setTimeout(sendHeartbeat, 1000);
+            
+                function sendHeartbeat(){
+                    setTimeout(sendHeartbeat, 1000);
+                    client.emit('ping', { beat : 1 });
+                }
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
                   this.onConnect(client, db);
