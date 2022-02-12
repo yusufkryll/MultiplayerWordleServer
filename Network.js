@@ -4,7 +4,7 @@ module.exports = class Network
     {
         this.randomElement = function (obj) {
             var keys = Object.keys(obj);
-            return obj[keys[ keys.length * Math.random() << 0]];
+            return keys[ keys.length * Math.random() << 0];
         }
         this.onConnect = (client, db) => { console.log("Connection successfully!") };
         this.Start(port);
@@ -61,10 +61,10 @@ module.exports = class Network
                         console.log(otherPlayer);
                         let roomName = client.id + "-room";
                         client.join(roomName);
-
+                        console.log(roomName);
                         //this.io.to(otherPlayer).join(roomName);
-                        this.io.to(otherPlayer).emit("GameFound", client.id);
                         client.emit("GameFound", otherPlayer);
+                        this.io.to(otherPlayer).emit("GameFound", client.id);
                     }
                     console.log(getInPool());
                 })
