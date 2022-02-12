@@ -53,20 +53,17 @@ module.exports = class Network
                     }
                     else
                     {
-                        client.leave("pool");
+                        console.log("There is players in pool.");
+                        var otherPlayer = this.randomElement(inPool);
+                        console.log(otherPlayer);
                         let roomName = client.id + "-room";
                         client.join(roomName);
-                        var otherPlayer = this.randomElement(Object.values(inPool).filter((v, i) => {
-                            return v != client.id
-                        }));
+
                         //this.io.to(otherPlayer).join(roomName);
                         this.io.to(otherPlayer).emit("GameFound", client.id);
                         client.emit("GameFound", otherPlayer);
-
-                        console.log(otherPlayer);
                     }
                     console.log(inPool);
-                    client.log(client.rooms);
                 })
             }
             catch (err)
