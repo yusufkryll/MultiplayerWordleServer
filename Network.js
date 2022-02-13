@@ -63,6 +63,7 @@ module.exports = class Network
                         console.log(otherPlayer.id);
                         let roomName = client.id + "-room";
                         client.join(roomName);
+                        otherPlayer.leave("pool");
                         otherPlayer.join(roomName);
                         console.log(roomName);
                         client.emit("GameFound", otherPlayer.id);
