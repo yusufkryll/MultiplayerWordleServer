@@ -36,7 +36,7 @@ module.exports = class Network
         this.Listen();
         this.io.on('connect', (client) => {
                 let getInPool = async () => {
-                    const sockets = await io.in("pool").fetchSockets();
+                    const sockets = await this.io.in("pool").fetchSockets();
                     return sockets;
                 };
                 client.log = (message) => client.emit("debug-log", message); 
