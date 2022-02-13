@@ -44,7 +44,8 @@ module.exports = class Network
                     this.io.emit('RunAll', data);
                 });
                 client.on("SearchGame", async (data) => {
-                    if(Object.keys(getInPool()).length <= 0)
+                    var inPool2 = await this.io.in("pool").fetchSockets();
+                    if(Object.keys(inPool2).length <= 0)
                     {
                         console.log("No players found.");
                         client.join("pool");
