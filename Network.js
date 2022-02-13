@@ -37,6 +37,9 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
+                client.on('disconnect', reason => {
+                    console.log(`reason: ${reason}`);
+                });
                 let getInPool = () => {
                     var poolRoom = this.io.sockets.adapter.rooms['pool'];
                     if(poolRoom != undefined) return poolRoom.sockets;
