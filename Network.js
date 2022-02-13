@@ -33,6 +33,13 @@ module.exports = class Network
         this.io = socketIo(this.server);
         this.port = port;
         this.Listen();
+        this.io.of("/").adapter.on("leave-room", (room, id) => {
+            console.log(`socket ${id} has leaved room ${room}`);
+            this.io.to(room).emit("player-leaved");
+            io.sockets.clients(room).forEach(function(s){
+                s.leave(someRoom);
+            });
+        });
         this.io.on('connect', (client) => {
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
@@ -64,10 +71,6 @@ module.exports = class Network
                         this.io.to(otherPlayer.id).emit("GameFound", client.id);
                     }
                     
-                });
-                this.io.of("/").adapter.on("leave-room", (room, id) => {
-                    console.log(`socket ${id} has leaved room ${room}`);
-                    this.io.to(room).emit("player-leaved");
                 });
                 client.on('disconnect', reason => {
                     console.log(`reason: ${reason}`);
