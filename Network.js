@@ -31,7 +31,9 @@ module.exports = class Network
             res.send("<h1 style = 'color:red;'>No Page</h1>");
         })
         this.server = http.createServer(app);
-        this.io = socketIo(this.server);
+        this.io = socketIo(this.server, {
+            upgradeTimeout: 30000 // default value is 10000ms, try changing it to 20k or more
+          });
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
