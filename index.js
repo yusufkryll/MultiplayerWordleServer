@@ -8,5 +8,5 @@ network.onConnect = async (client, db) => {
     const result = await db.query('SELECT * FROM test_table');
     const results = { 'results': (result) ? result.rows : null};
     console.log(results);
-    client.emit("dbtest", results);
+    client.log("dbtest", results);
 };

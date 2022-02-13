@@ -42,7 +42,6 @@ module.exports = class Network
                 };
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
-                    console.log("connectedToPool")
                     this.onConnect(client, db);
                 });
                 client.on('RunAll', (data) => {
