@@ -49,15 +49,14 @@ module.exports = class Network
                     {
                         console.log("No players found.");
                         client.join("pool");
-                        var inPool1 = await getInPool();
-                        console.log(inPool1);
+                        console.log(await getInPool());
                     }
                     else
                     {
                         console.log("There is players in pool.");
                         var inPool = await getInPool();
-                        var otherPlayer = this.randomElement();
-                        console.log(otherPlayer);
+                        var otherPlayer = this.randomElement(inPool);
+                        console.log(otherPlayer.id);
                         let roomName = client.id + "-room";
                         client.join(roomName);
                         console.log(roomName);
