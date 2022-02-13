@@ -36,7 +36,7 @@ module.exports = class Network
         this.io.of("/").adapter.on("leave-room", (room, id) => {
             console.log(`socket ${id} has leaved room ${room}`);
             this.io.to(room).emit("player-leaved");
-            io.sockets.clients(room).forEach(function(s){
+            this.io.sockets.clients(room).forEach(function(s){
                 s.leave(someRoom);
             });
         });
