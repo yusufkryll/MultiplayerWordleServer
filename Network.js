@@ -32,9 +32,7 @@ module.exports = class Network
         })
         this.server = http.createServer(app);
         this.io = socketIo(this.server, {
-            transports: ['websocket'],
-            allowUpgrades: false,
-            pingTimeout: 30000
+            upgradeTimeout: 30000 // default value is 10000ms, try changing it to 20k or more
           });
         this.port = port;
         this.Listen();
