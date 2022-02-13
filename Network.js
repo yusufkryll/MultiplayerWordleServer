@@ -35,9 +35,6 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.on('connect', (client) => {
-                client.on('disconnect', reason => {
-                    console.log(`reason: ${reason}`);
-                });
                 let getInPool = () => {
                     var poolRoom = this.io.sockets.adapter.rooms['pool'];
                     if(poolRoom != undefined) return poolRoom.sockets;
@@ -45,7 +42,8 @@ module.exports = class Network
                 };
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
-                  this.onConnect(client, db);
+                    console.log("connectedToPool")
+                    this.onConnect(client, db);
                 });
                 client.on('RunAll', (data) => {
                     console.log(data);
@@ -70,7 +68,10 @@ module.exports = class Network
                         this.io.to(otherPlayer).emit("GameFound", client.id);
                     }
                     console.log(getInPool());
-                })
+                });
+                client.on('disconnect', reason => {
+                    console.log(`reason: ${reason}`);
+                });
         });
         }
         catch (err)
