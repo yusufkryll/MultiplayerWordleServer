@@ -58,12 +58,16 @@ module.exports = class Network
                         console.log(otherPlayer.id);
                         let roomName = client.id + "-room";
                         client.join(roomName);
+                        otherPlayer.join(roomName);
                         console.log(roomName);
-
                         client.emit("GameFound", otherPlayer.id);
                         this.io.to(otherPlayer.id).emit("GameFound", client.id);
                     }
                     
+                });
+                this.io.of("/").adapter.on("leave-room", (room, id) => {
+                    console.log(`socket ${id} has leaved room ${room}`);
+                    this.io.to(room).emit("player-leaved");
                 });
                 client.on('disconnect', reason => {
                     console.log(`reason: ${reason}`);
