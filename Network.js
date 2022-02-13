@@ -2,9 +2,8 @@ module.exports = class Network
 {
     constructor(port)
     {
-        this.randomElement = function (obj) {
-            var keys = Object.keys(obj);
-            return keys[ keys.length * Math.random() << 0];
+        this.randomElement = function (arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
         }
         this.onConnect = (client, db) => { console.log("Connection successfully!") };
         this.Start(port);
