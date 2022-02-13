@@ -59,10 +59,9 @@ module.exports = class Network
                         let roomName = client.id + "-room";
                         client.join(roomName);
                         console.log(roomName);
-                        //this.io.to(otherPlayer).join(roomName);
+                        
                         client.emit("GameFound", otherPlayer);
                         this.io.to(otherPlayer).emit("GameFound", client.id);
-                        console.log(inPool);
                     }
                     
                 });
