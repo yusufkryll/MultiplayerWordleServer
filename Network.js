@@ -60,8 +60,8 @@ module.exports = class Network
                         client.join(roomName);
                         console.log(roomName);
 
-                        // client.emit("GameFound", otherPlayer);
-                        // this.io.to(otherPlayer).emit("GameFound", client.id);
+                        client.emit("GameFound", otherPlayer.id);
+                        this.io.to(otherPlayer.id).emit("GameFound", client.id);
                     }
                     
                 });
