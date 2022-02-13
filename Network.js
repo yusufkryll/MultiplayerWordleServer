@@ -40,15 +40,6 @@ module.exports = class Network
                     if(poolRoom != undefined) return poolRoom.sockets;
                     else return {};
                 };
-                client.on('pong', function(data){
-                    console.log("Pong received from client");
-                });
-                setTimeout(sendHeartbeat, 1000);
-            
-                function sendHeartbeat(){
-                    setTimeout(sendHeartbeat, 1000);
-                    client.emit('ping', { beat : 1 });
-                }
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
                   this.onConnect(client, db);
