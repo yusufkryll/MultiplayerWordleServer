@@ -121,12 +121,11 @@ module.exports = class Network
                 function inclf(str, d, queue)
                 {
 
-                    var i = 0;
-                    for(let f in founded)
+                    for(let i in founded)
                     {
+                        let f = founded[i];
                         console.log(f);
                         if(f != d[queue] && str[i] == d[queue]) return true;
-                        i++;
                     }
                     return false;
                 }
