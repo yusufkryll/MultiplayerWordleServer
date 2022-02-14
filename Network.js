@@ -38,10 +38,8 @@ module.exports = class Network
             this.io.to(room).emit("player-leaved");
             this.io.in(room).socketsLeave(room);
         });
-        this.socketProperties = [];
         this.io.on('connect', (client) => {
-                var availableProperty = this.socketProperties.find(o => o.id == client.id);
-                if(availableProperty == null) this.socketProperties.push({ id: client.id, language: "turkish" });
+                client.data.language = "turkish";
                 var otherPlayer = null;
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
@@ -61,12 +59,13 @@ module.exports = class Network
                     otherPlayer.emit(data.name, data.data);
                 });
                 client.on("SearchGame", async (data) => {
+                    client.data.language = data.language;
                     var getInPool = async() => {
                         var all = await this.io.in("pool").fetchSockets();
                         var selected = [];
                         all.forEach(s => {
-                            var properties = this.socketProperties.find(o => o.id == s.id);
-                            if(properties.language == data.language) selected.push(s);
+                            console.log(s.data.language);
+                            if(s.data.language == client.data.language) selected.push(s);
                         });
                         console.log(selected);
                         return selected;
