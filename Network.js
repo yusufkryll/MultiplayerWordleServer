@@ -119,7 +119,7 @@ module.exports = class Network
                 }
                 function GetCorrection(w, letter, queue) {
                     if(letter == w[queue]) return "correct";
-                    else if(w.contains(letter)) return "available";
+                    else if(w.includes(letter)) return "available";
                     return incorrects;
                 }
                 var res = {
