@@ -49,9 +49,8 @@ module.exports = class Network
                     this.io.emit('RunAll', data);
                 });
                 client.on("emit-other", (data) => {
-                    var obj = JSON.parse(data);
-                    otherPlayer.emit(obj.name, obj.data);
-                    console.log(obj);
+                    console.log(data);
+                    otherPlayer.emit(data.name, data.data);
                 });
                 client.on("SearchGame", async (data) => {
                     var getInPool = async() => await this.io.in("pool").fetchSockets();
