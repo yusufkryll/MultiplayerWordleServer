@@ -116,9 +116,16 @@ module.exports = class Network
                 else
                 {
                     wordLine++;
-                    who.emit("word-end", wordLine);
-                    other.emit("word-end", wordLine);
                 }
+                who.emit("word-end", {
+                    line: wordLine,
+                    l1: word[0] == data[0],
+                    l2: word[1] == data[1],
+                    l3: word[2] == data[2],
+                    l4: word[3] == data[3],
+                    l5: word[4] == data[4],
+                });
+                other.emit("word-end", wordLine);
             });
         }
 
