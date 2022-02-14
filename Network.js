@@ -50,7 +50,7 @@ module.exports = class Network
                 });
                 client.on("OtherPlayer", async(data) => {
                     console.log("other player is " + data);
-                    var sockets = await io.in(data).fetchSockets();
+                    var sockets = await this.io.in(data).fetchSockets();
                     console.log(sockets);
                     otherPlayer = sockets[0];
                 });
