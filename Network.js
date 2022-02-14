@@ -133,6 +133,7 @@ module.exports = class Network
                 function GetCorrection(w, d, queue) {
                     if(d[queue] == w[queue]) {
                         founded[queue] = w[queue];
+                        console.table(founded);
                         return "correct";
                     }
                     else if(inclf(w, d, queue)) return "available";
