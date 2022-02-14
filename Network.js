@@ -105,8 +105,8 @@ module.exports = class Network
         {
             var word = tr.GetRandomWord();
             var wordLine = 0;
-            var founded = [null, null, null, null, null];
             twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
+                var founded = [null, null, null, null, null];
                 console.log(word);
                 console.log(data);
                 if(word == data)
@@ -138,6 +138,11 @@ module.exports = class Network
                     else if(inclf(w, d, queue)) return "available";
                     return "incorrect";
                 }
+                GetCorrection(word, data, 0);
+                GetCorrection(word, data, 1);
+                GetCorrection(word, data, 2);
+                GetCorrection(word, data, 3);
+                GetCorrection(word, data, 4);
                 var res = {
                     line: wordLine,
                     l1: GetCorrection(word, data, 0),
