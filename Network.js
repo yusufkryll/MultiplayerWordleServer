@@ -40,8 +40,8 @@ module.exports = class Network
         });
         this.socketProperties = [];
         this.io.on('connect', (client) => {
-                var availableProperty = socketProperties.find(o => o.id == client.id);
-                if(availableProperty == null) socketProperties.push({ id: client.id, language: "turkish" });
+                var availableProperty = this.socketProperties.find(o => o.id == client.id);
+                if(availableProperty == null) this.socketProperties.push({ id: client.id, language: "turkish" });
                 var otherPlayer = null;
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
@@ -68,6 +68,7 @@ module.exports = class Network
                             var properties = this.socketProperties.find(o => o.id == s.id);
                             if(properties.language == data.language) selected.push(s);
                         });
+                        console.log(selected);
                         return selected;
                     };
                     if(Object.keys(await getInPool()).length <= 0)
