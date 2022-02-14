@@ -120,7 +120,7 @@ module.exports = class Network
                 function GetCorrection(w, letter, queue) {
                     if(letter == w[queue]) return "correct";
                     else if(w.includes(letter)) return "available";
-                    return incorrects;
+                    return "incorrect";
                 }
                 var res = {
                     line: wordLine,
