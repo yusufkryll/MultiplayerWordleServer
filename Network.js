@@ -80,6 +80,7 @@ module.exports = class Network
                         client.emit("GameFound", otherPlayer.id);
                         otherPlayer.emit("GameFound", client.id);
                         otherPlayer.emit("OtherPlayer", client.id);
+                        gameAction(client, otherPlayer, roomName);
                     }
                     
                 });
@@ -87,6 +88,23 @@ module.exports = class Network
                     console.log(`reason: ${reason}`);
                 });
         });
+
+        function gameAction(client, otherPlayer, roomName)
+        {
+            var wordLine = 0;
+            twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
+                wordLine++;
+                who.emit("word-end", wordLine);
+                other.emit("word-end", wordLine);
+            });
+        }
+
+        function twiceOn(c1, c2, n, action)
+        {
+            c1.on(n, (data) => action(c1, c2, data));
+            c2.on(n, (data) => action(c2, c1, data));
+        }
+
         }
         catch (err)
         {
