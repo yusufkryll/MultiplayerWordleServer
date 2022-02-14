@@ -105,6 +105,7 @@ module.exports = class Network
         {
             var word = tr.GetRandomWord();
             var wordLine = 0;
+            var founded = [null, null, null, null, null];
             twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
                 console.log(word);
                 console.log(data);
@@ -117,18 +118,33 @@ module.exports = class Network
                 {
                     wordLine++;
                 }
-                function GetCorrection(w, letter, queue) {
-                    if(letter == w[queue]) return "correct";
-                    else if(w.includes(letter)) return "available";
+                function inclf(str, d, queue)
+                {
+
+                    var i = 0;
+                    for(f in founded)
+                    {
+                        if(f != d[queue] && str[i] == d[queue]) return true;
+                        i++;
+                    }
+                    return false;
+                }
+
+                function GetCorrection(w, d, queue) {
+                    if(d[queue] == w[queue]) {
+                        founded[queue] = w[queue];
+                        return "correct";
+                    }
+                    else if(inclf(w, d, queue)) return "available";
                     return "incorrect";
                 }
                 var res = {
                     line: wordLine,
-                    l1: GetCorrection(word, data[0], 0),
-                    l2: GetCorrection(word, data[1], 1),
-                    l3: GetCorrection(word, data[2], 2),
-                    l4: GetCorrection(word, data[3], 3),
-                    l5: GetCorrection(word, data[4], 4),
+                    l1: GetCorrection(word, data, 0),
+                    l2: GetCorrection(word, data, 1),
+                    l3: GetCorrection(word, data, 2),
+                    l4: GetCorrection(word, data, 3),
+                    l5: GetCorrection(word, data, 4),
                 };
                 console.log(res);
                 who.emit("word-end", res);
