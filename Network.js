@@ -48,6 +48,9 @@ module.exports = class Network
                     console.log(data);
                     this.io.emit('RunAll', data);
                 });
+                client.on("OtherPlayer", async(data) => {
+                    otherPlayer = (await io.in(data).fetchSockets())[0];
+                });
                 client.on("emit-other", (data) => {
                     console.log(data);
                     otherPlayer.emit(data.name, data.data);
@@ -73,6 +76,7 @@ module.exports = class Network
                         console.log(roomName);
                         client.emit("GameFound", otherPlayer.id);
                         otherPlayer.emit("GameFound", client.id);
+                        otherPlayer.emit("OtherPlayer", client.id);
                     }
                     
                 });
