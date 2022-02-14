@@ -49,7 +49,10 @@ module.exports = class Network
                     this.io.emit('RunAll', data);
                 });
                 client.on("OtherPlayer", async(data) => {
-                    otherPlayer = (await io.in(data).fetchSockets())[0];
+                    console.log("other player is " + data);
+                    var sockets = await io.in(data).fetchSockets();
+                    console.log(sockets);
+                    otherPlayer = sockets[0];
                 });
                 client.on("emit-other", (data) => {
                     console.log(data);
