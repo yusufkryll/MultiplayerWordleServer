@@ -122,7 +122,7 @@ module.exports = class Network
                 {
 
                     var i = 0;
-                    for(f in founded)
+                    for(let f in founded)
                     {
                         if(f != d[queue] && str[i] == d[queue]) return true;
                         i++;
