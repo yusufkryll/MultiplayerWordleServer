@@ -108,9 +108,17 @@ module.exports = class Network
             twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
                 console.log(word);
                 console.log(data);
-                wordLine++;
-                who.emit("word-end", wordLine);
-                other.emit("word-end", wordLine);
+                if(word == data)
+                {
+                    who.emit("win");
+                    other.emit("lose");
+                }
+                else
+                {
+                    wordLine++;
+                    who.emit("word-end", wordLine);
+                    other.emit("word-end", wordLine);
+                }
             });
         }
 
