@@ -39,6 +39,7 @@ module.exports = class Network
             this.io.in(room).socketsLeave(room);
         });
         this.io.on('connect', (client) => {
+                var otherPlayer = null;
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
                     this.onConnect(client, db);
@@ -46,6 +47,11 @@ module.exports = class Network
                 client.on('RunAll', (data) => {
                     console.log(data);
                     this.io.emit('RunAll', data);
+                });
+                client.on("emit-other", (data) => {
+                    var obj = parseJSON(data);
+                    otherPlayer.emit(obj.name, obj.data);
+                    console.log(obj);
                 });
                 client.on("SearchGame", async (data) => {
                     var getInPool = async() => await this.io.in("pool").fetchSockets();
@@ -59,7 +65,7 @@ module.exports = class Network
                     {
                         console.log("There is players in pool.");
                         var inPool = await getInPool();
-                        var otherPlayer = this.randomElement(inPool);
+                        otherPlayer = this.randomElement(inPool);
                         console.log(otherPlayer.id);
                         let roomName = client.id + "-room";
                         client.join(roomName);
@@ -67,7 +73,7 @@ module.exports = class Network
                         otherPlayer.join(roomName);
                         console.log(roomName);
                         client.emit("GameFound", otherPlayer.id);
-                        this.io.to(otherPlayer.id).emit("GameFound", client.id);
+                        otherPlayer.emit("GameFound", client.id);
                     }
                     
                 });
