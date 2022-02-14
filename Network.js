@@ -117,15 +117,22 @@ module.exports = class Network
                 {
                     wordLine++;
                 }
-                who.emit("word-end", {
+                function GetCorrection(w, letter, queue) {
+                    if(letter == w[queue]) return "correct";
+                    else if(w.contains(letter)) return "available";
+                    return incorrects;
+                }
+                var res = {
                     line: wordLine,
-                    l1: word[0] == data[0],
-                    l2: word[1] == data[1],
-                    l3: word[2] == data[2],
-                    l4: word[3] == data[3],
-                    l5: word[4] == data[4],
-                });
-                other.emit("word-end", wordLine);
+                    l1: GetCorrection(word, data[0], 0),
+                    l2: GetCorrection(word, data[1], 1),
+                    l3: GetCorrection(word, data[2], 2),
+                    l4: GetCorrection(word, data[3], 3),
+                    l5: GetCorrection(word, data[4], 4),
+                };
+                console.log(res);
+                who.emit("word-end", res);
+                other.emit("word-end", res);
             });
         }
 
