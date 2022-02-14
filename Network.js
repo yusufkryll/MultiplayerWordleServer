@@ -38,7 +38,10 @@ module.exports = class Network
             this.io.to(room).emit("player-leaved");
             this.io.in(room).socketsLeave(room);
         });
+        this.socketProperties = [];
         this.io.on('connect', (client) => {
+                var availableProperty = socketProperties.find(o => o.id == client.id);
+                if(availableProperty == null) socketProperties.push({ id: client.id, language: "turkish" });
                 var otherPlayer = null;
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, db) => {
@@ -55,11 +58,18 @@ module.exports = class Network
                     otherPlayer = sockets[0];
                 });
                 client.on("emit-other", (data) => {
-                    console.log(data);
                     otherPlayer.emit(data.name, data.data);
                 });
                 client.on("SearchGame", async (data) => {
-                    var getInPool = async() => await this.io.in("pool").fetchSockets();
+                    var getInPool = async() => {
+                        var all = await this.io.in("pool").fetchSockets();
+                        var selected = [];
+                        all.forEach(s => {
+                            var properties = this.socketProperties.find(o => o.id == s.id);
+                            if(properties.language == data.language) selected.push(s);
+                        });
+                        return selected;
+                    };
                     if(Object.keys(await getInPool()).length <= 0)
                     {
                         console.log("No players found.");
