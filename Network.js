@@ -18,6 +18,8 @@ module.exports = class Network
         const socketIo = require('socket.io');
         const { Pool } = require('pg');
         const app = express();
+        const tr = new (require('./wordgenerator'))("tr", () => {});
+        const en = new (require('./wordgenerator'))("en", () => {});
 
         const pool = new Pool({
             connectionString: process.env.DATABASE_URL,
@@ -101,8 +103,11 @@ module.exports = class Network
 
         function gameAction(client, otherPlayer, roomName)
         {
+            var word = tr.GetRandomWord();
             var wordLine = 0;
             twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
+                console.log(word);
+                console.log(data);
                 wordLine++;
                 who.emit("word-end", wordLine);
                 other.emit("word-end", wordLine);
