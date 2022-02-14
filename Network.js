@@ -124,6 +124,7 @@ module.exports = class Network
                     var i = 0;
                     for(let f in founded)
                     {
+                        console.log(f);
                         if(f != d[queue] && str[i] == d[queue]) return true;
                         i++;
                     }
@@ -133,7 +134,6 @@ module.exports = class Network
                 function GetCorrection(w, d, queue) {
                     if(d[queue] == w[queue]) {
                         founded[queue] = w[queue];
-                        console.table(founded);
                         return "correct";
                     }
                     else if(inclf(w, d, queue)) return "available";
