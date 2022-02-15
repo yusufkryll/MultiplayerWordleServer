@@ -105,6 +105,25 @@ module.exports = class Network
         {
             var word = tr.GetRandomWord();
             var wordLine = 0;
+            var turn = true;
+            var time = 60;
+            client.emit("set-turn", turn);
+            otherPlayer.emit("set-turn", !turn);
+            setInterval(function() {
+                time -= 0.1;
+                if(time <= 0)
+                {
+                    time = 60;
+                    turn = !turn;
+                    client.emit("time-up", turn);
+                    otherPlayer.emit("time-up", !turn);
+                }
+                else
+                {
+                    client.emit("turn-time", time);
+                    otherPlayer.emit("turn-time", time);
+                }
+            }, 100);
             twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
                 var founded = [null, null, null, null, null];
                 console.log(word);
