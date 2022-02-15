@@ -36,7 +36,6 @@ module.exports = class Network
         this.port = port;
         this.Listen();
         this.io.of("/").adapter.on("leave-room", (room, id) => {
-            console.log(`socket ${id} has leaved room ${room}`);
             this.io.to(room).emit("player-leaved");
             this.io.in(room).socketsLeave(room);
         });
@@ -48,13 +47,10 @@ module.exports = class Network
                     this.onConnect(client, db);
                 });
                 client.on('RunAll', (data) => {
-                    console.log(data);
                     this.io.emit('RunAll', data);
                 });
                 client.on("OtherPlayer", async(data) => {
-                    console.log("other player is " + data);
                     var sockets = await this.io.in(data).fetchSockets();
-                    console.log(sockets);
                     otherPlayer = sockets[0];
                 });
                 client.on("emit-other", (data) => {
@@ -66,29 +62,22 @@ module.exports = class Network
                         var all = await this.io.in("pool").fetchSockets();
                         var selected = [];
                         all.forEach(s => {
-                            console.log(s.data.language);
                             if(s.data.language == client.data.language) selected.push(s);
                         });
-                        console.log(selected);
                         return selected;
                     };
                     if(Object.keys(await getInPool()).length <= 0)
                     {
-                        console.log("No players found.");
                         client.join("pool");
-                        console.log(await getInPool());
                     }
                     else
                     {
-                        console.log("There is players in pool.");
                         var inPool = await getInPool();
                         otherPlayer = this.randomElement(inPool);
-                        console.log(otherPlayer.id);
                         let roomName = client.id + "-room";
                         client.join(roomName);
                         otherPlayer.leave("pool");
                         otherPlayer.join(roomName);
-                        console.log(roomName);
                         client.emit("GameFound", otherPlayer.id);
                         otherPlayer.emit("GameFound", client.id);
                         otherPlayer.emit("OtherPlayer", client.id);
@@ -192,6 +181,7 @@ module.exports = class Network
                 {
                     applyTurn();
                 }
+                console.log(lastFounded);
                 var res = {
                     line: wordLine,
                     l1: GetCorrection(word, data, 0),
@@ -200,7 +190,6 @@ module.exports = class Network
                     l4: GetCorrection(word, data, 3),
                     l5: GetCorrection(word, data, 4),
                 };
-                console.log(res);
                 who.emit("word-end", res);
                 other.emit("word-end", res);
             });
