@@ -113,8 +113,6 @@ module.exports = class Network
                 otherPlayer.emit("set-turn", !turn);
                 client.emit("turn-time", 60);
                 otherPlayer.emit("turn-time", 60);
-                client.emit("on-key", "");
-                client.emit("on-key", "");
             }
             applyTurn();
             setInterval(function() {
