@@ -112,8 +112,8 @@ module.exports = class Network
                 time = 60;
                 client.emit("set-turn", turn);
                 otherPlayer.emit("set-turn", !turn);
-                client.emit("turn-time", 60);
-                otherPlayer.emit("turn-time", 60);
+                client.emit("turn-time", time);
+                otherPlayer.emit("turn-time", time);
             }
             applyTurn();
             setInterval(function() {
@@ -181,6 +181,10 @@ module.exports = class Network
                 if(!anyFounded())
                 {
                     turn = !turn;
+                    applyTurn();
+                }
+                else
+                {
                     applyTurn();
                 }
                 var res = {
