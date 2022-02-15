@@ -109,6 +109,7 @@ module.exports = class Network
             var time = 60;
             function applyTurn()
             {
+                time = 60;
                 client.emit("set-turn", turn);
                 otherPlayer.emit("set-turn", !turn);
                 client.emit("turn-time", 60);
