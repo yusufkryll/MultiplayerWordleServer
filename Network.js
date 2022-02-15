@@ -110,7 +110,7 @@ module.exports = class Network
             client.emit("set-turn", turn);
             otherPlayer.emit("set-turn", !turn);
             setInterval(function() {
-                time -= 0.1;
+                time -= 1;
                 if(time <= 0)
                 {
                     time = 60;
@@ -123,7 +123,7 @@ module.exports = class Network
                     client.emit("turn-time", time);
                     otherPlayer.emit("turn-time", time);
                 }
-            }, 100);
+            }, 1000);
             twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
                 var founded = [null, null, null, null, null];
                 console.log(word);
