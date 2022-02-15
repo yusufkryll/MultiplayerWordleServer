@@ -107,6 +107,7 @@ module.exports = class Network
             var wordLine = 0;
             var turn = true;
             var time = 60;
+            var lastFounded = [null, null, null, null, null];
             function applyTurn()
             {
                 time = 60;
@@ -174,7 +175,11 @@ module.exports = class Network
                     for(let i in founded)
                     {
                         var f = founded[i];
-                        if(f != null) return true;
+                        if(f != null && lastFounded[i] == null) 
+                        {
+                            lastFounded[i] = f;
+                            return true;
+                        }
                     }
                     return false;
                 }
