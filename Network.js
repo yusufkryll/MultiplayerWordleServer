@@ -107,8 +107,14 @@ module.exports = class Network
             var wordLine = 0;
             var turn = true;
             var time = 60;
-            client.emit("set-turn", turn);
-            otherPlayer.emit("set-turn", !turn);
+            function applyTurn()
+            {
+                client.emit("set-turn", turn);
+                otherPlayer.emit("set-turn", !turn);
+                client.emit("turn-time", 60);
+                otherPlayer.emit("turn-time", 60);
+            }
+            applyTurn();
             setInterval(function() {
                 time -= 1;
                 if(time <= 0)
@@ -162,6 +168,20 @@ module.exports = class Network
                 GetCorrection(word, data, 2);
                 GetCorrection(word, data, 3);
                 GetCorrection(word, data, 4);
+                function anyFounded()
+                {
+                    for(let i in founded)
+                    {
+                        var f = founded[i];
+                        if(f != null) return true;
+                    }
+                    return false;
+                }
+                if(!anyFounded())
+                {
+                    turn = !turn;
+                    applyTurn();
+                }
                 var res = {
                     line: wordLine,
                     l1: GetCorrection(word, data, 0),
