@@ -69,9 +69,7 @@ module.exports = class Network
                     otherPlayer.emit(data.name, data.data);
                 });
 
-                client.on("send-message", (data) => {
-                    otherPlayer.emit("send-message", data);
-                })
+
 
 
                 client.on("SearchGame", async (data) => {
@@ -93,6 +91,9 @@ module.exports = class Network
                         var inPool = await getInPool();
                         otherPlayer = this.randomElement(inPool);
                         let roomName = client.id + "-room";
+                        client.on("send-message", (data) => {
+                            this.io.to(roomName).emit("send-message", data);
+                        })
                         client.join(roomName);
                         otherPlayer.leave("pool");
                         otherPlayer.join(roomName);
