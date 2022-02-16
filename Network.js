@@ -66,6 +66,8 @@ module.exports = class Network
                 client.on("emit-other", (data) => {
                     otherPlayer.emit(data.name, data.data);
                 });
+
+
                 client.on("SearchGame", async (data) => {
                     client.data.language = data.language;
                     var getInPool = async() => {
@@ -137,8 +139,8 @@ module.exports = class Network
                 console.log(data);
                 if(word == data)
                 {
-                    who.emit("win");
-                    other.emit("lose");
+                    Win(who);
+                    Lose(other);
                 }
                 else
                 {
@@ -211,7 +213,25 @@ module.exports = class Network
             c2.on(n, (data) => action(c2, c1, data));
         }
 
+
+        function Win(who)
+        {
+            who.emit("win");
+            var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${client.data.user_id}'`);
+            const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+            const result1 = resultu ? resultu.rows[0] : null;
+            client.emit("refresh-coin", result1.coin);
         }
+
+        function Lose(who)
+        {
+            who.emit("lose");
+            var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${client.data.user_id}'`);
+            const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+            const result1 = resultu ? resultu.rows[0] : null;
+            client.emit("refresh-coin", result1.coin);
+        }
+    }
         catch (err)
         {
             console.log(err);
