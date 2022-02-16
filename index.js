@@ -15,7 +15,7 @@ network.onConnect = async (client, db) => {
         console.log(data.user_id);
         console.log(data.user_name);
         const result = await 
-        db.query(`INSERT INTO users (user_id, user_name) VALUES ('${data.user_id}', '${data.user_name}')`);
+        db.query(`INSERT INTO users (id, user_id, user_name) VALUES (IDENTITY(1,1), '${data.user_id}', '${data.user_name}')`);
         client.log(result);
     });
     //const result = await db.query('SELECT * FROM test_table');
