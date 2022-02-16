@@ -141,8 +141,8 @@ module.exports = class Network
                 console.log(data);
                 if(word == data)
                 {
-                    Win(who, db);
-                    Lose(other, db);
+                    Win(who);
+                    Lose(other);
                 }
                 else
                 {
@@ -207,6 +207,23 @@ module.exports = class Network
                 who.emit("word-end", res);
                 other.emit("word-end", res);
             });
+            async function Win(who)
+            {
+                who.emit("win");
+                var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${who.data.user_id}'`);
+                const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+                const result1 = resultu ? resultu.rows[0] : null;
+                client.emit("refresh-coin", result1.coin);
+            }
+    
+            async function Lose(who)
+            {
+                who.emit("lose");
+                var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${who.data.user_id}'`);
+                const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+                const result1 = resultu ? resultu.rows[0] : null;
+                client.emit("refresh-coin", result1.coin);
+            }
         }
 
         function twiceOn(c1, c2, n, action)
@@ -216,23 +233,7 @@ module.exports = class Network
         }
 
 
-        async function Win(who, db)
-        {
-            who.emit("win");
-            var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${client.data.user_id}'`);
-            const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
-            const result1 = resultu ? resultu.rows[0] : null;
-            client.emit("refresh-coin", result1.coin);
-        }
 
-        async function Lose(who, db)
-        {
-            who.emit("lose");
-            var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${client.data.user_id}'`);
-            const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
-            const result1 = resultu ? resultu.rows[0] : null;
-            client.emit("refresh-coin", result1.coin);
-        }
     }
         catch (err)
         {
