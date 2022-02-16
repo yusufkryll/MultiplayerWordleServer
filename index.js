@@ -9,7 +9,7 @@ network.onConnect = async (client, db) => {
         const result = await 
         db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
         const result1 = result ? result.rows[0] : null;
-        client.log(result1);
+        client.emit("guest-status", result1 != null);
     });
     client.on("guest-login", async (data) => {
         const result = await 
