@@ -5,13 +5,13 @@ var network = new Network(port, {});
 
 network.onConnect = (client, db) => {
     console.log("A player connected: " + client.id); 
-    client.on("get-name", () => {
-        const result = await 
-        db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
+    client.on("get-name", async() => {
+        const result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
         const result1 = result ? result.rows[0] : null;
         client.emit("get-name", result1.user_name);
     }) 
     client.on("get-guest", async(data) => {
+        client.data.user_id = data;
         const result = await 
         db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
         const result1 = result ? result.rows[0] : null;
