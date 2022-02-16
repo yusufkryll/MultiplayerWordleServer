@@ -13,8 +13,7 @@ network.onConnect = (client, db) => {
     client.on("refresh-coin", async() => {
         const result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
         const result1 = result ? result.rows[0] : null;
-        console.log(result1);
-        //client.emit("refresh-coin", result1.coin);
+        if(result1 != null && result1.coin != null) client.emit("refresh-coin", result1.coin);
     });
     client.on("get-guest", async(data) => {
         client.data.user_id = data;
