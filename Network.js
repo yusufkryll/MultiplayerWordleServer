@@ -216,6 +216,7 @@ module.exports = class Network
             });
             async function Win(who)
             {
+                who.leave(roomName);
                 who.emit("win");
                 var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${who.data.user_id}'`);
                 const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
@@ -225,6 +226,7 @@ module.exports = class Network
     
             async function Lose(who)
             {
+                who.leave(roomName);
                 who.emit("lose");
                 var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${who.data.user_id}'`);
                 const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
