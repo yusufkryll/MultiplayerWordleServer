@@ -69,6 +69,10 @@ module.exports = class Network
                     otherPlayer.emit(data.name, data.data);
                 });
 
+                client.on("send-message", (data) => {
+                    otherPlayer.emit("send-message", data);
+                })
+
 
                 client.on("SearchGame", async (data) => {
                     client.data.language = data.language;
