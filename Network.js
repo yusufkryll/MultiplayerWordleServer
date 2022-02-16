@@ -40,7 +40,7 @@ module.exports = class Network
             auth: {
                 type: "basic",
                 username: "admin",
-                password: "msw1232"
+                password: "$2b$10$eridLObZqZm1Hu0.ab1fvORb1bwm9MKZZ3YqvvWdj2Cb8Nkhwimqi" //msw1232
               },
         });
         this.port = port;
