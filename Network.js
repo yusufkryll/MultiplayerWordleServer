@@ -52,9 +52,11 @@ module.exports = class Network
         this.io.on('connect', (client) => {
                 client.data.language = "turkish";
                 var otherPlayer = null;
+                var db = null;
                 client.log = (message) => client.emit("debug-log", message); 
-                pool.connect((err, db) => {
-                    this.onConnect(client, db);
+                pool.connect((err, database) => {
+                    this.onConnect(client, database);
+                    db = database;
                 });
                 client.on('RunAll', (data) => {
                     this.io.emit('RunAll', data);
@@ -93,7 +95,7 @@ module.exports = class Network
                         client.emit("GameFound", otherPlayer.data.user_name);
                         otherPlayer.emit("GameFound", client.data.user_name);
                         otherPlayer.emit("OtherPlayer", client.data.user_name);
-                        gameAction(client, otherPlayer, roomName);
+                        gameAction(client, otherPlayer, roomName, db);
                     }
                     
                 });
@@ -102,7 +104,7 @@ module.exports = class Network
                 });
         });
 
-        function gameAction(client, otherPlayer, roomName)
+        function gameAction(client, otherPlayer, roomName, db)
         {
             var word = tr.GetRandomWord();
             var wordLine = 0;
@@ -139,8 +141,8 @@ module.exports = class Network
                 console.log(data);
                 if(word == data)
                 {
-                    Win(who);
-                    Lose(other);
+                    Win(who, db);
+                    Lose(other, db);
                 }
                 else
                 {
@@ -214,7 +216,7 @@ module.exports = class Network
         }
 
 
-        async function Win(who)
+        async function Win(who, db)
         {
             who.emit("win");
             var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${client.data.user_id}'`);
@@ -223,7 +225,7 @@ module.exports = class Network
             client.emit("refresh-coin", result1.coin);
         }
 
-        async function Lose(who)
+        async function Lose(who, db)
         {
             who.emit("lose");
             var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${client.data.user_id}'`);
