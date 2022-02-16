@@ -12,6 +12,8 @@ network.onConnect = async (client, db) => {
         client.emit("guest-status", result1 != null);
     });
     client.on("guest-login", async (data) => {
+        console.log(data.user_id);
+        console.log(data.user_name);
         const result = await 
         db.query(`INSERT INTO users (user_id, user_name) VALUES ('${data.user_id}', '${data.user_name}')`);
         const results = { 'results': (result) ? result.rows : null};
