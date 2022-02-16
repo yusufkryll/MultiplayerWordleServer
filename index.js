@@ -16,6 +16,7 @@ network.onConnect = (client, db) => {
         db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
         const result1 = result ? result.rows[0] : null;
         client.emit("guest-status", result1 != null);
+        if(result1 != null) client.data.user_name = result1.user_name;
     });
     client.on("guest-login", async (data) => {
         console.log(data.user_id);
@@ -23,6 +24,8 @@ network.onConnect = (client, db) => {
         const result = await 
         db.query(`INSERT INTO users (user_id, user_name) VALUES ('${data.user_id}', '${data.user_name}')`);
         if(result != null) client.emit("guest-status", true);
+        const result1 = result ? result.rows[0] : null;
+        if(result1 != null) client.data.user_name = result1.user_name;
     });
     //const result = await db.query('SELECT * FROM test_table');
     //const results = { 'results': (result) ? result.rows : null};

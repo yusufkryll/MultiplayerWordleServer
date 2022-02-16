@@ -88,9 +88,9 @@ module.exports = class Network
                         client.join(roomName);
                         otherPlayer.leave("pool");
                         otherPlayer.join(roomName);
-                        client.emit("GameFound", otherPlayer.data.user_id);
-                        otherPlayer.emit("GameFound", client.data.user_id);
-                        otherPlayer.emit("OtherPlayer", client.data.user_id);
+                        client.emit("GameFound", otherPlayer.data.user_name);
+                        otherPlayer.emit("GameFound", client.data.user_name);
+                        otherPlayer.emit("OtherPlayer", client.data.user_name);
                         gameAction(client, otherPlayer, roomName);
                     }
                     
