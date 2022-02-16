@@ -101,7 +101,7 @@ module.exports = class Network
                         otherPlayer.join(roomName);
                         client.emit("GameFound", otherPlayer.data.user_name);
                         otherPlayer.emit("GameFound", client.data.user_name);
-                        otherPlayer.emit("OtherPlayer", client.data.user_name);
+                        otherPlayer.emit("OtherPlayer", client.id);
                         gameAction(client, otherPlayer, roomName, db);
                     }
                     
