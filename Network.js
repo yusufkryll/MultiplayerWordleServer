@@ -17,9 +17,12 @@ module.exports = class Network
         const express = require('express');
         const socketIo = require('socket.io');
         const { Pool } = require('pg');
+        const { instrument } = require("@socket.io/admin-ui");
         const app = express();
         const tr = new (require('./wordgenerator'))("tr", () => {});
         const en = new (require('./wordgenerator'))("en", () => {});
+
+
 
         const pool = new Pool({
             connectionString: process.env.DATABASE_URL,
@@ -33,6 +36,13 @@ module.exports = class Network
         })
         this.server = http.createServer(app);
         this.io = socketIo(this.server);
+        instrument(this.io, {
+            auth: {
+                type: "basic",
+                username: "admin",
+                password: "msw1232"
+              },
+        });
         this.port = port;
         this.Listen();
         this.io.of("/").adapter.on("leave-room", (room, id) => {
