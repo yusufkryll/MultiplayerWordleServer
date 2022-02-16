@@ -3,8 +3,14 @@ const Network = require('./Network');
 var port = process.env.PORT || 8080;
 var network = new Network(port, {});
 
-network.onConnect = async (client, db) => {
-    console.log("A player connected: " + client.id);  
+network.onConnect = (client, db) => {
+    console.log("A player connected: " + client.id); 
+    client.on("get-name", () => {
+        const result = await 
+        db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
+        const result1 = result ? result.rows[0] : null;
+        client.emit("get-name", result1.user_name);
+    }) 
     client.on("get-guest", async(data) => {
         const result = await 
         db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
