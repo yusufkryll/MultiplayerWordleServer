@@ -214,7 +214,7 @@ module.exports = class Network
         }
 
 
-        function Win(who)
+        async function Win(who)
         {
             who.emit("win");
             var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${client.data.user_id}'`);
@@ -223,7 +223,7 @@ module.exports = class Network
             client.emit("refresh-coin", result1.coin);
         }
 
-        function Lose(who)
+        async function Lose(who)
         {
             who.emit("lose");
             var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${client.data.user_id}'`);
