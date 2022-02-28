@@ -22,8 +22,6 @@ module.exports = class Network
         const tr = new (require('./wordgenerator'))("tr", () => {});
         const en = new (require('./wordgenerator'))("en", () => {});
 
-
-
         const pool = new Pool({
             connectionString: process.env.DATABASE_URL || "postgres://bjmjvnngklsrad:e4dc6551d77356557e7d15ed33d039606bea3ad78f338f245080d7ba30939805@ec2-34-194-171-47.compute-1.amazonaws.com:5432/d14eun7heveni0",
             ssl: {
