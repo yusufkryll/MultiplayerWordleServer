@@ -38,9 +38,9 @@ network.onConnect = (client, db) => {
     client.on("guest-login", async (data) => {
         console.log(data.user_id);
         console.log(data.user_name);
-        client.data.public_id = crypto.randomBytes(4).toString("hex") 
-                                + "-" + crypto.randomBytes(4).toString("hex")
-                                + "-" + crypto.randomBytes(4).toString("hex");
+        client.data.public_id = crypto.randomBytes(2).toString("hex") 
+                                + "-" + crypto.randomBytes(2).toString("hex")
+                                + "-" + crypto.randomBytes(2).toString("hex");
         const result = await 
         db.query(`INSERT INTO users (user_id, user_name, public_id) VALUES ('${data.user_id}', '${data.user_name}', '${client.data.public_id}')`);
         if(result != null) client.emit("guest-status", true);
