@@ -25,7 +25,7 @@ module.exports = class Network
 
 
         const pool = new Pool({
-            connectionString: process.env.DATABASE_URL,
+            connectionString: process.env.DATABASE_URL || "postgres://bjmjvnngklsrad:e4dc6551d77356557e7d15ed33d039606bea3ad78f338f245080d7ba30939805@ec2-34-194-171-47.compute-1.amazonaws.com:5432/d14eun7heveni0",
             ssl: {
               rejectUnauthorized: false
             }
@@ -55,6 +55,7 @@ module.exports = class Network
                 var db = null;
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, database) => {
+                    if(err) throw err;
                     this.onConnect(client, database);
                     db = database;
                 });
