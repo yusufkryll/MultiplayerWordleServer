@@ -29,7 +29,6 @@ network.onConnect = (client, db) => {
             return;
         }
         const result = db.query(`UPDATE users SET friends = friends || '{"${data}"}'  WHERE user_id = '${client.data.user_id}'`);
-        const result1 = result ? result.rows[0] : null;
         client.emit("AddFriend", true); 
         
     }) 
