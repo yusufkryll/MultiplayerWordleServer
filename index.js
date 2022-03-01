@@ -35,12 +35,18 @@ network.onConnect = (client, db) => {
         client.emit("guest-status", result1 != null);
         if(result1 != null) client.data.user_name = result1.user_name;
     });
+    client.on("GetFriends", async(data) => {
+        const result = await 
+        db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+        const result1 = result ? result.rows[0] : null;
+        console.table(result1.friends);
+        client.emit("GetFriends", result1.friends);
+    });
     client.on("guest-login", async (data) => {
         console.log(data.user_id);
         console.log(data.user_name);
-        client.data.public_id = crypto.randomBytes(2).toString("hex") 
-                                + "-" + crypto.randomBytes(2).toString("hex")
-                                + "-" + crypto.randomBytes(2).toString("hex");
+        client.data.public_id = 
+        crypto.randomBytes(6).toString("hex").match(/.{1,4}/g).join("-");
         const result = await 
         db.query(`INSERT INTO users (user_id, user_name, public_id) VALUES ('${data.user_id}', '${data.user_name}', '${client.data.public_id}')`);
         if(result != null) client.emit("guest-status", true);
