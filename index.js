@@ -9,10 +9,8 @@ network.onConnect = (client, db) => {
     function TriggerUserRow(emitName, rowName)
     {
         client.on(emitName, async(data) => {
-            const result = await 
-            db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+            const result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
             const result1 = result ? result.rows[0] : null;
-            console.table(result1.friends);
             client.emit(emitName, result1[rowName]);
         });
     }
@@ -81,7 +79,7 @@ network.onConnect = (client, db) => {
         client.emit("GetFriends", result1.friends);
     });
 
-    TriggerUserRow("GetRequests", "friendrequests");
+    TriggerUserRow("GetRequests", "friendrequest");
 
     client.on("guest-login", async (data) => {
         console.log(data.user_id);
