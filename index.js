@@ -6,6 +6,16 @@ var network = new Network(port, {});
 
 
 network.onConnect = (client, db) => {
+    function TriggerUserRow(emitName, rowName)
+    {
+        client.on(emitName, async(data) => {
+            const result = await 
+            db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
+            const result1 = result ? result.rows[0] : null;
+            console.table(result1.friends);
+            client.emit(emitName, result1[rowName]);
+        });
+    }
     console.log("A player connected: " + client.id); 
     client.on("GetUserData", async(data) => {
         const result = await db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
@@ -67,9 +77,11 @@ network.onConnect = (client, db) => {
         const result = await 
         db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
         const result1 = result ? result.rows[0] : null;
-        console.table(result1.friends);
         client.emit("GetFriends", result1.friends);
     });
+
+    TriggerUserRow("GetRequests", "friendrequests");
+
     client.on("guest-login", async (data) => {
         console.log(data.user_id);
         console.log(data.user_name);
