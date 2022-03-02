@@ -24,13 +24,11 @@ network.onConnect = (client, db) => {
     }) 
     client.on("AddFriend", async(data) => {
         const requestedUser = await db.query(`SELECT * FROM users WHERE public_id = '${data}'`);
-        console.table(requestedUser)
-        if(requestedUser == null || requestedUser.public_id == null) {
+        if(requestedUser == null || requestedUser.rows == null || requestedUser.rows[0] == null) {
             client.emit("AddFriend", false); 
         }
         else
         {
-            console.log("here");
             var result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' AND ${data} = ANY(friends)`);
             var result1 = result ? result.rows : false;
             if(!result1) 
