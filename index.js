@@ -29,7 +29,7 @@ network.onConnect = (client, db) => {
             return;
         }
         const result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' and ${requestedUser.public_id} = ANY(friends)`);
-        const result1 = result ? result.rows[0] : null;
+        const result1 = result.rows ? result.rows[0] : null;
         if(result1 == null) 
         {
             client.emit("AddFriend", false);
