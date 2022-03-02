@@ -45,8 +45,9 @@ network.onConnect = (client, db) => {
             {
                 client.emit("AddFriend", false);
             }else{
-                await db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE public_id = '${client.data.public_id}'`);
-                await db.query(`UPDATE users SET friends = friends || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
+                //await db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE public_id = '${client.data.public_id}'`);
+                //await db.query(`UPDATE users SET friends = friends || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
+                await db.query(`UPDATE users SET friendrequest = friendrequest || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
                 client.emit("AddFriend", true);
             }
         }
