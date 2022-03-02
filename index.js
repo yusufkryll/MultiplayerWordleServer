@@ -28,7 +28,14 @@ network.onConnect = (client, db) => {
             client.emit("AddFriend", false); 
             return;
         }
-        const result = db.query(`UPDATE users SET friends = friends || '{"${data}"}'  WHERE user_id = '${client.data.user_id}'`);
+        const result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' and ${requestedUser.public_id} = ANY(friends)`);
+        const result1 = result ? result.rows[0] : null;
+        if(result1 == null) 
+        {
+            client.emit("AddFriend", false);
+            return;
+        }
+        db.query(`UPDATE users SET friends = friends || '{"${data}"}'  WHERE user_id = '${client.data.user_id}'`);
         client.emit("AddFriend", true); 
         
     }) 
