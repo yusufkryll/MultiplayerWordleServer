@@ -58,7 +58,11 @@ network.onConnect = (client, db) => {
         db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
         const result1 = result ? result.rows[0] : null;
         client.emit("guest-status", result1 != null);
-        if(result1 != null) client.data.user_name = result1.user_name;
+        if(result1 != null) 
+        {
+            client.data.user_name = result1.user_name;
+            client.data.public_id = result1.public_id;
+        }
     });
     client.on("GetFriends", async(data) => {
         const result = await 
