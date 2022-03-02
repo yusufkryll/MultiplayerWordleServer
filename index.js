@@ -29,14 +29,14 @@ network.onConnect = (client, db) => {
         }
         else
         {
-            var result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' AND ${data} = ANY(friends)`);
+            var result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' AND (friends @> ARRAY['${data}']::text[])`);
             var result1 = result ? result.rows : false;
             if(!result1) 
             {
                 client.emit("AddFriend", false);
                 return;
             }else{
-                db.query(`UPDATE users SET friends = friends || '{"${data}"}'  WHERE user_id = '${client.data.user_id}'`);
+                db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE user_id = '${client.data.user_id}'`);
                 client.emit("AddFriend", true); 
             }
         }
