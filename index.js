@@ -28,16 +28,20 @@ network.onConnect = (client, db) => {
             client.emit("AddFriend", false); 
             return;
         }
-        const result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' and ${requestedUser.public_id} = ANY(friends)`);
-        const result1 = result.rows;
-        if(!result1) 
+        else
         {
-            client.emit("AddFriend", false);
-            return;
+            console.log("here");
+            var result = db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' and ${requestedUser.public_id} = ANY(friends)`);
+            var result1 = result ? result.rows : false;
+            if(!result1) 
+            {
+                client.emit("AddFriend", false);
+                return;
+            }else{
+                db.query(`UPDATE users SET friends = friends || '{"${data}"}'  WHERE user_id = '${client.data.user_id}'`);
+                client.emit("AddFriend", true); 
+            }
         }
-        db.query(`UPDATE users SET friends = friends || '{"${data}"}'  WHERE user_id = '${client.data.user_id}'`);
-        client.emit("AddFriend", true); 
-        
     }) 
     client.on("get-name", async() => {
         const result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
