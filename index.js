@@ -30,11 +30,10 @@ network.onConnect = (client, db) => {
         else
         {
             var result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}' AND (friends @> ARRAY['${data}']::text[])`);
-            var result1 = result ? result.rows : false;
-            if(!result1) 
+            const result1 = result ? result.rows[0] : null;
+            if(result1) 
             {
                 client.emit("AddFriend", false);
-                return;
             }else{
                 await db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE public_id = '${client.data.public_id}'`);
                 await db.query(`UPDATE users SET friends = friends || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
