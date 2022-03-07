@@ -103,6 +103,7 @@ network.onConnect = (client, db) => {
         if(new Date(result1.freeawardtime) > new Date())
         {
             await db.query(`UPDATE users SET freeawardtime = '${new Date().addHours(24).toJSON()}' WHERE public_id = '${client.data.public_id}'`);
+            await db.query(`UPDATE users SET coin = coin + 250 WHERE public_id = '${client.data.public_id}'`);
             client.emit("GiveFreeAward", true);
         }
         else
