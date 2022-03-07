@@ -100,7 +100,7 @@ network.onConnect = (client, db) => {
         const result = await 
         db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
         const result1 = result ? result.rows[0] : null;
-        if(new Date(result1.freeawardtime) > new Date())
+        if(new Date(result1.freeawardtime) < new Date())
         {
             await db.query(`UPDATE users SET freeawardtime = '${new Date().addHours(24).toJSON()}' WHERE public_id = '${client.data.public_id}'`);
             await db.query(`UPDATE users SET coin = coin + 250 WHERE public_id = '${client.data.public_id}'`);
