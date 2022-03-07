@@ -54,6 +54,11 @@ network.onConnect = (client, db) => {
         await db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE public_id = '${client.data.public_id}'`);
         await db.query(`UPDATE users SET friends = friends || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
     }) 
+    client.on("GetElement", async(data) => {
+        const result = await db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
+        const result1 = result ? result.rows[0] : null;
+        client.emit("GetElement-" + data, result1[data]);
+    }) 
     client.on("get-name", async() => {
         const result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
         const result1 = result ? result.rows[0] : null;
