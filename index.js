@@ -49,7 +49,8 @@ network.onConnect = (client, db) => {
         }
     }) 
     client.on("AcceptRequest", async(data) => {
-        await db.query(`UPDATE users SET friendrequest = ARRAY_REMOVE(friendrequest, '${data}')  WHERE public_id = '${client.data.public_id}'`);
+        console.log(data);
+        //await db.query(`UPDATE users SET friendrequest = ARRAY_REMOVE(friendrequest, '${data}')  WHERE public_id = '${client.data.public_id}'`);
         await db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE public_id = '${client.data.public_id}'`);
         await db.query(`UPDATE users SET friends = friends || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
     }) 
