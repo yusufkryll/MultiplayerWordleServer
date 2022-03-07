@@ -1,8 +1,15 @@
 const Network = require('./Network');
 const crypto = require('crypto');
 
+
 var port = process.env.PORT || 8080;
 var network = new Network(port, {});
+
+
+Date.prototype.addHours = function(h) {
+    this.setTime(this.getTime() + (h*60*60*1000));
+    return this;
+  }
 
 
 network.onConnect = (client, db) => {
@@ -49,7 +56,6 @@ network.onConnect = (client, db) => {
         }
     }) 
     client.on("AcceptRequest", async(data) => {
-        console.log(data);
         await db.query(`UPDATE users SET friendrequest = ARRAY_REMOVE(friendrequest, '${data}')  WHERE public_id = '${client.data.public_id}'`);
         await db.query(`UPDATE users SET friends = friends || '{"${data}"}' WHERE public_id = '${client.data.public_id}'`);
         await db.query(`UPDATE users SET friends = friends || '{"${client.data.public_id}"}' WHERE public_id = '${data}'`);
@@ -90,13 +96,29 @@ network.onConnect = (client, db) => {
 
     TriggerUserRow("GetRequests", "friendrequest");
 
+    client.on("GiveFreeAward", async() => {
+        const result = await 
+        db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
+        const result1 = result ? result.rows[0] : null;
+        if(new Date(result1.freeawardtime) > new Date())
+        {
+            await db.query(`UPDATE users SET freeawardtime = '${new Date().addHours(24)}' WHERE public_id = '${client.data.public_id}'`);
+            client.emit("GiveFreeAward", true);
+        }
+        else
+        {
+            client.emit("GiveFreeAward", false);
+        }
+    });
+
     client.on("guest-login", async (data) => {
         console.log(data.user_id);
         console.log(data.user_name);
         client.data.public_id = 
         crypto.randomBytes(6).toString("hex").match(/.{1,4}/g).join("-");
+        var time = new Date().addHours(24);
         const result = await 
-        db.query(`INSERT INTO users (user_id, user_name, public_id) VALUES ('${data.user_id}', '${data.user_name}', '${client.data.public_id}')`);
+        db.query(`INSERT INTO users (user_id, user_name, public_id, freeawardtime) VALUES ('${data.user_id}', '${data.user_name}', '${client.data.public_id}', '${time}')`);
         if(result != null) client.emit("guest-status", true);
         const result1 = result ? result.rows[0] : null;
         if(result1 != null) client.data.user_name = result1.user_name;
