@@ -102,7 +102,7 @@ network.onConnect = (client, db) => {
         const result1 = result ? result.rows[0] : null;
         if(new Date(result1.freeawardtime) > new Date())
         {
-            await db.query(`UPDATE users SET freeawardtime = '${new Date().addHours(24)}' WHERE public_id = '${client.data.public_id}'`);
+            await db.query(`UPDATE users SET freeawardtime = '${new Date().addHours(24).toJSON()}' WHERE public_id = '${client.data.public_id}'`);
             client.emit("GiveFreeAward", true);
         }
         else
@@ -116,7 +116,7 @@ network.onConnect = (client, db) => {
         console.log(data.user_name);
         client.data.public_id = 
         crypto.randomBytes(6).toString("hex").match(/.{1,4}/g).join("-");
-        var time = new Date().addHours(24);
+        var time = new Date().addHours(24).toJSON();
         const result = await 
         db.query(`INSERT INTO users (user_id, user_name, public_id, freeawardtime) VALUES ('${data.user_id}', '${data.user_name}', '${client.data.public_id}', '${time}')`);
         if(result != null) client.emit("guest-status", true);
