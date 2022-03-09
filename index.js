@@ -113,7 +113,7 @@ network.onConnect = (client, db) => {
     });
 
     client.on("Challenge", async (data) => {
-        const sockets = await io.fetchSockets();
+        const sockets = await client.io.fetchSockets();
         var selectedSocket = sockets.find(s => s.public_id == data);
         selectedSocket.emit("Challenge", client.data.public_id);
     });
