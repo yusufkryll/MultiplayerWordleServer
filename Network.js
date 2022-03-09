@@ -73,7 +73,7 @@ module.exports = class Network
                     this.io.to(client.data.gameRoom).emit("send-message", data);
                 })
                 
-                var startGame = (otherPlayer) => {
+                var startGame = () => {
                     let roomName = client.id + "-room";
                     client.join(roomName);
                     client.data.gameRoom = roomName;
@@ -89,15 +89,15 @@ module.exports = class Network
                 client.on("Challenge", async (data) => {
                     let sockets = await this.io.fetchSockets();
                     var selectedSocket = sockets.find(s => s.data.public_id == data);
-                    console.log(selectedSocket);
+                    otherPlayer = selectedSocket;
                     if(selectedSocket) selectedSocket.emit("Challenge", client.data.public_id);
                 });
 
                 client.on("ChallengeAccept", async (data) => {
                     const sockets = await this.io.fetchSockets();
                     var selectedSocket = sockets.find(s => s.data.public_id == data);
-                    console.log(selectedSocket);
-                    if(selectedSocket) startGame(selectedSocket);
+                    otherPlayer = selectedSocket;
+                    if(selectedSocket) startGame();
                 });            
 
 
@@ -119,7 +119,7 @@ module.exports = class Network
                     {
                         var inPool = await getInPool();
                         otherPlayer = this.randomElement(inPool);
-                        startGame(otherPlayer);
+                        startGame();
                     }
                     
                 });
