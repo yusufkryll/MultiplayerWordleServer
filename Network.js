@@ -88,10 +88,8 @@ module.exports = class Network
 
                 client.on("Challenge", async (data) => {
                     let sockets = await this.io.fetchSockets();
-                    console.log(data);
                     var selectedSocket = sockets.find(s => s.data.public_id == data);
-                    console.log(selectedSocket);
-                    //selectedSocket.emit("Challenge", client.data.public_id);
+                    selectedSocket.emit("Challenge", client.data.public_id);
                 });
 
                 client.on("ChallengeAccept", async (data) => {
