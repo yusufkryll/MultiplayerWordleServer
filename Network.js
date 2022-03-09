@@ -86,6 +86,12 @@ module.exports = class Network
                     gameAction(client, otherPlayer, roomName, db);
                 };
 
+                client.on("Challenge", async (data) => {
+                    const sockets = await this.io.fetchSockets();
+                    var selectedSocket = sockets.find(s => s.public_id == data);
+                    selectedSocket.emit("Challenge", client.data.public_id);
+                });
+
                 client.on("ChallengeAccept", async (data) => {
                     const sockets = await this.io.fetchSockets();
                     var selectedSocket = sockets.find(s => s.public_id == data);
