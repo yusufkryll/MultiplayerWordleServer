@@ -72,6 +72,25 @@ module.exports = class Network
                     console.log(data);
                     this.io.to(client.data.gameRoom).emit("send-message", data);
                 })
+                
+                let startGame = async(otherPlayer) => {
+                    let roomName = client.id + "-room";
+                    client.join(roomName);
+                    client.data.gameRoom = roomName;
+                    otherPlayer.data.gameRoom = roomName;
+                    otherPlayer.leave("pool");
+                    otherPlayer.join(roomName);
+                    client.emit("GameFound", otherPlayer.data.user_name);
+                    otherPlayer.emit("GameFound", client.data.user_name);
+                    otherPlayer.emit("OtherPlayer", client.id);
+                    gameAction(client, otherPlayer, roomName, db);
+                };
+
+                client.on("ChallengeAccept", async (data) => {
+                    const sockets = await io.fetchSockets();
+                    var selectedSocket = sockets.find(s => s.public_id == data);
+                    startGame(selectedSocket);
+                });            
 
 
                 client.on("SearchGame", async (data) => {
@@ -92,16 +111,7 @@ module.exports = class Network
                     {
                         var inPool = await getInPool();
                         otherPlayer = this.randomElement(inPool);
-                        let roomName = client.id + "-room";
-                        client.join(roomName);
-                        client.data.gameRoom = roomName;
-                        otherPlayer.data.gameRoom = roomName;
-                        otherPlayer.leave("pool");
-                        otherPlayer.join(roomName);
-                        client.emit("GameFound", otherPlayer.data.user_name);
-                        otherPlayer.emit("GameFound", client.data.user_name);
-                        otherPlayer.emit("OtherPlayer", client.id);
-                        gameAction(client, otherPlayer, roomName, db);
+                        startGame(otherPlayer);
                     }
                     
                 });
