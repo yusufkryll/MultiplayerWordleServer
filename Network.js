@@ -87,7 +87,7 @@ module.exports = class Network
                 };
 
                 client.on("ChallengeAccept", async (data) => {
-                    const sockets = await io.fetchSockets();
+                    const sockets = await this.io.fetchSockets();
                     var selectedSocket = sockets.find(s => s.public_id == data);
                     startGame(selectedSocket);
                 });            
