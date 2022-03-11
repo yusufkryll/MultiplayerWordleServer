@@ -31,7 +31,7 @@ network.onConnect = (client, db) => {
         const result = await db.query(`SELECT * FROM arenas`);
         const result1 = result ? result.rows : null;
         console.log(result1);
-        client.emit("GetArenas", result1);
+        client.emit("GetArenas", result1.toJSON());
     });
     client.on("get-id", async() => {
         const result = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
