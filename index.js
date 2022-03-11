@@ -22,8 +22,8 @@ network.onConnect = (client, db) => {
         });
     }
     console.log("A player connected: " + client.id); 
-    client.on("GetUserData", async(data) => {
-        const result = await db.query(`SELECT * FROM users WHERE user_id = '${data}'`);
+    client.on("GetUserData", async() => {
+        const result = await db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
         const result1 = result ? result.rows[0] : null;
         client.emit("GetUserData", result1);
     });
