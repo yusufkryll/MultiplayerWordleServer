@@ -103,11 +103,13 @@ module.exports = class Network
 
                 client.on("SearchGame", async (data) => {
                     client.data.language = data.language;
+                    client.data.arenaName = data.arenaName;
                     var getInPool = async() => {
                         var all = await this.io.in("pool").fetchSockets();
                         var selected = [];
                         all.forEach(s => {
-                            if(s.data.language == client.data.language) selected.push(s);
+                            if(s.data.language == client.data.language 
+                                && s.data.arenaName == client.data.arenaName) selected.push(s);
                         });
                         return selected;
                     };
@@ -159,10 +161,13 @@ module.exports = class Network
                     otherPlayer.emit("turn-time", time);
                 }
             }, 1000);
-            twiceOn(client, otherPlayer, "word-end", (who, other, data) => {
+            twiceOn(client, otherPlayer, "word-end", async(who, other, data) => {
                 var founded = [null, null, null, null, null];
                 console.log(word);
                 console.log(data);
+                var arena = await db.query(`SELECT * FROM arenas WHERE name = '${who.data.arenaName}'`);
+                const arenaResult = arena ? arena.rows[0] : null;
+                await db.query(`UPDATE users SET coin = coin - ${arenaResult.fee} WHERE public_id IN ('${who.data.public_id}', '${other.data.public_id}')`);
                 if(word == data)
                 {
                     Win(who);
@@ -235,7 +240,9 @@ module.exports = class Network
             {
                 who.leave(roomName);
                 who.emit("win");
-                var q = await db.query(`UPDATE users SET coin = coin + 500 WHERE user_id = '${who.data.user_id}'`);
+                var arena = await db.query(`SELECT * FROM arenas WHERE name = '${who.data.arenaName}'`);
+                const arenaResult = arena ? arena.rows[0] : null;
+                var q = await db.query(`UPDATE users SET coin = coin + ${arenaResult.prize} WHERE user_id = '${who.data.user_id}'`);
                 const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
                 const result1 = resultu ? resultu.rows[0] : null;
                 client.emit("refresh-coin", result1.coin);
@@ -245,10 +252,6 @@ module.exports = class Network
             {
                 who.leave(roomName);
                 who.emit("lose");
-                var q = await db.query(`UPDATE users SET coin = coin - 500 WHERE user_id = '${who.data.user_id}'`);
-                const resultu = await db.query(`SELECT * FROM users WHERE user_id = '${client.data.user_id}'`);
-                const result1 = resultu ? resultu.rows[0] : null;
-                client.emit("refresh-coin", result1.coin);
             }
         }
 
