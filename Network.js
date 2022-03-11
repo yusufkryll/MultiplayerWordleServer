@@ -137,6 +137,9 @@ module.exports = class Network
             var turn = true;
             var time = 60;
             var lastFounded = [null, null, null, null, null];
+            var arena = await db.query(`SELECT * FROM arenas WHERE name = '${client.data.arenaName}'`);
+            const arenaResult = arena ? arena.rows[0] : null;
+            await db.query(`UPDATE users SET coin = coin - ${arenaResult.fee} WHERE public_id IN ('${client.data.public_id}', '${otherPlayer.data.public_id}')`);
             function applyTurn()
             {
                 time = 60;
@@ -165,9 +168,6 @@ module.exports = class Network
                 var founded = [null, null, null, null, null];
                 console.log(word);
                 console.log(data);
-                var arena = await db.query(`SELECT * FROM arenas WHERE name = '${who.data.arenaName}'`);
-                const arenaResult = arena ? arena.rows[0] : null;
-                await db.query(`UPDATE users SET coin = coin - ${arenaResult.fee} WHERE public_id IN ('${who.data.public_id}', '${other.data.public_id}')`);
                 if(word == data)
                 {
                     Win(who);
