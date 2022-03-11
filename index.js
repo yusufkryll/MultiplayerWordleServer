@@ -24,12 +24,12 @@ network.onConnect = (client, db) => {
     console.log("A player connected: " + client.id); 
     client.on("GetUserData", async() => {
         const result = await db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
-        const result1 = result ? result.rows : null;
+        const result1 = result ? result.rows[0] : null;
         client.emit("GetUserData", result1);
     });
     client.on("GetArenas", async() => {
         const result = await db.query(`SELECT * FROM arenas`);
-        const result1 = result ? result.rows[0] : null;
+        const result1 = result ? result.rows : null;
         console.log(result1);
         client.emit("GetArenas", result1);
     });
