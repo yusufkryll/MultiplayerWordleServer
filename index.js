@@ -25,6 +25,7 @@ network.onConnect = (client, db) => {
     client.on("GetUserData", async() => {
         const result = await db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
         const result1 = result ? result.rows[0] : null;
+        if(result1.is_admin) result1.user_name = "[ADMIN] " + result1.user_name;
         client.emit("GetUserData", result1);
     });
     client.on("GetArenas", async() => {
