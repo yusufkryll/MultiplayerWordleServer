@@ -130,7 +130,7 @@ module.exports = class Network
                 });
         });
 
-        function gameAction(client, otherPlayer, roomName, db)
+        async function gameAction(client, otherPlayer, roomName, db)
         {
             var word = tr.GetRandomWord();
             var wordLine = 0;
