@@ -93,7 +93,7 @@ network.onConnect = (client, db) => {
         }
         const maintenance = await 
         db.query(`SELECT * FROM main WHERE name = 'maintenance_work'`);
-        const maintenanceResult = maintenance ? result.rows[0] : null;
+        const maintenanceResult = maintenance ? maintenance.rows[0] : null;
         if(maintenanceResult.state && !result1.is_admin)
         {
             client.emit("maintenance");
