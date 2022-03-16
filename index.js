@@ -100,13 +100,14 @@ network.onConnect = (client, db) => {
                 client.emit("banned", result1.ban_reason);
                 return;
             }
+            if(maintenanceResult.state && !result1.is_admin)
+            {
+                client.emit("maintenance");
+                return;
+            }
+            client.emit("guest-status", true);
         }
-        if(maintenanceResult.state && !result1.is_admin)
-        {
-            client.emit("maintenance");
-            return;
-        }
-        client.emit("guest-status", result1 != null);
+        else client.emit("guest-status", false);
     });
     client.on("GetFriends", async(data) => {
         const result = await 
