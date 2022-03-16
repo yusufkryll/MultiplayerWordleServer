@@ -109,7 +109,7 @@ network.onConnect = (client, db) => {
             }
             client.emit("guest-status", true);
             setInterval(async() => {
-                let sockets = await this.io.fetchSockets();
+                let sockets = await client.io.fetchSockets();
                 let socketIds = [];
                 sockets.forEach(element => {
                     socketIds.push(element.data.public_id);
