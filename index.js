@@ -107,7 +107,15 @@ network.onConnect = (client, db) => {
             }
             client.emit("guest-status", true);
         }
-        else client.emit("guest-status", false);
+        else 
+        {
+            if(maintenanceResult.state)
+            {
+                client.emit("maintenance");
+                return;
+            }
+            client.emit("guest-status", false);
+        }
     });
     client.on("GetFriends", async(data) => {
         const result = await 
