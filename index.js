@@ -26,6 +26,7 @@ network.onConnect = (client, db) => {
         const result = await db.query(`SELECT * FROM users WHERE public_id = '${client.data.public_id}'`);
         const result1 = result ? result.rows[0] : null;
         if(result1.is_admin) result1.user_name = "[ADMIN] " + result1.user_name;
+        client.data.friends = result1.friends;
         client.emit("GetUserData", result1);
     });
     client.on("GetArenas", async() => {
@@ -95,6 +96,7 @@ network.onConnect = (client, db) => {
         {
             client.data.user_name = result1.user_name;
             client.data.public_id = result1.public_id;
+            client.data.friends = result1.friends;
             if(result1.is_banned)
             {
                 client.emit("banned", result1.ban_reason);
@@ -106,6 +108,17 @@ network.onConnect = (client, db) => {
                 return;
             }
             client.emit("guest-status", true);
+            setInterval(() => {
+                let sockets = await this.io.fetchSockets();
+                let socketIds = [];
+                sockets.forEach(element => {
+                    socketIds.push(element.data.public_id);
+                });
+                var onlineFriends = socketIds.filter(s => client.data.friends.includes(s));
+                console.table(onlineFriends);
+                client.emit("GetOnlineFriends", onlineFriends);
+
+            }, 1000);
         }
         else 
         {
