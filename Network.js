@@ -5,7 +5,7 @@ module.exports = class Network
         this.randomElement = function (arr) {
             return arr[Math.floor(Math.random() * arr.length)];
         }
-        this.onConnect = (client, db) => { console.log("Connection successfully!") };
+        this.onConnect = (io, client, db) => { console.log("Connection successfully!") };
         this.Start(port);
         
     }
@@ -54,7 +54,7 @@ module.exports = class Network
                 client.log = (message) => client.emit("debug-log", message); 
                 pool.connect((err, database) => {
                     if(err) throw err;
-                    this.onConnect(client, database);
+                    this.onConnect(this.io, client, database);
                     db = database;
                 });
                 client.on('RunAll', (data) => {

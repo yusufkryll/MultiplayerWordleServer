@@ -12,7 +12,7 @@ Date.prototype.addHours = function(h) {
   }
 
 
-network.onConnect = (client, db) => {
+network.onConnect = (io, client, db) => {
     function TriggerUserRow(emitName, rowName)
     {
         client.on(emitName, async(data) => {
@@ -109,7 +109,7 @@ network.onConnect = (client, db) => {
             }
             client.emit("guest-status", true);
             setInterval(async() => {
-                let sockets = await client.io.fetchSockets();
+                let sockets = await io.fetchSockets();
                 let socketIds = [];
                 sockets.forEach(element => {
                     socketIds.push(element.data.public_id);
