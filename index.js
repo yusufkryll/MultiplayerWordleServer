@@ -108,7 +108,7 @@ network.onConnect = (io, client, db) => {
                 return;
             }
             client.emit("guest-status", true);
-            setInterval(async() => {
+            var interval = setInterval(async() => {
                 let sockets = await io.fetchSockets();
                 let socketIds = [];
                 sockets.forEach(element => {
@@ -119,6 +119,9 @@ network.onConnect = (io, client, db) => {
                 client.emit("GetOnlineFriends", onlineFriends);
 
             }, 1000);
+            client.on("disconnect", () => {
+                clearInterval(interval);
+            });
         }
         else 
         {
